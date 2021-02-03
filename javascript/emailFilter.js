@@ -16,7 +16,7 @@ const emailFilter = {
     filterEmails : (emails)=> {
         let result = []
         emails.forEach( ( email )=> {
-            result.push(filterIfStatments.applyFilter(email));
+            result.push(filterRouter.applyFilter(email));
         });
         return result;
     }
@@ -44,3 +44,32 @@ const filterIfStatments = {
 
 }
 
+const filterRouter = {
+
+    filters: [
+        {
+            condition: (email) => email.subject.includes("Birthday"),
+            response: (email) => moveToFolder(email, emailFolders.birthday )
+        },
+        {
+            condition: (email) => email.from.includes("Tony"),
+            response: (email) =>  moveToFolder(email, emailFolders.spam )
+        },
+        {
+            condition: (email) => email.from.includes("A Gent NOT on Leave"),
+            response: (email) => moveToFolder(email, emailFolders.important)
+        }
+    ],
+
+    default:{ 
+        response: (email) => moveToFolder(email, emailFolders.inbox)
+    },
+
+    applyFilter: (email) => {
+        let result = {...email}; 
+        let chosenFilter = filterRouter.filters.find((filter) => filter.condition(email)) || filterRouter.default
+        result = chosenFilter.response(email);
+        return result;
+    }
+
+}
