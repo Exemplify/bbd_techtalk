@@ -1,0 +1,67 @@
+<html>
+  <head>
+    <title>An Email Filter Demo</title>
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <script src="./javascript/emailFilter.js"></script>
+    <script src="./javascript/getEmails.js"></script>
+    <script src="./javascript/displayEmails.js"></script>
+    <script src="./javascript/initialiseRadios.js"></script>
+    <script src="./app.js"></script>
+  </head>
+  <body>
+    <div class="header">
+      <h1>NeoMail</h1>
+    </div>
+    <div class="main-area">
+      <div class="nav-area">
+        <label class="container"
+          >Inbox
+          <input
+            type="radio"
+            checked="checked"
+            name="radio"
+            value="0"
+            onclick="updateInbox(value)"
+          />
+          <span class="checkmark"></span>
+        </label>
+        <label class="container"
+          >Birthdays
+          <input
+            type="radio"
+            name="radio"
+            value="1"
+            onclick="updateInbox(value)"
+          />
+          <span class="checkmark"></span>
+        </label>
+        <label class="container"
+          >Spam
+          <input
+            type="radio"
+            name="radio"
+            value="2"
+            onclick="updateInbox(value)"
+          />
+          <span class="checkmark"></span>
+        </label>
+        <label class="container"
+          >Important
+          <input
+            type="radio"
+            name="radio"
+            value="3"
+            onclick="updateInbox(value)"
+          />
+          <span class="checkmark"></span>
+        </label>
+      </div>
+
+      <div class="inbox-area">
+        <table class="inbox flex" id="inbox">
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </body>
+</html>
