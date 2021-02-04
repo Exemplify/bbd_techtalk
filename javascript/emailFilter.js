@@ -18,6 +18,7 @@ const emailFilter = {
         emails.forEach( ( email )=> {
             result.push(filterRouter.applyFilter(email));
         });
+        filterRouter.addFilter("Chris", emailFolders.important)
         return result;
     }
 
@@ -27,7 +28,7 @@ const filterIfStatments = {
     
     applyFilter: (email) => {
         let result = {};
-        if (email.subject.includes("Birthday")) {
+        if (email.subject.includes("Birthdays")) {
             result = moveToFolder(email, emailFolders.birthday );
         }
         else if (email.from.includes("Tony")) {
@@ -48,15 +49,15 @@ const filterRouter = {
 
     filters: [
         {
-            condition: (email) => email.subject.includes("Birthday"),
+            from: "Birthdays",
             response: (email) => moveToFolder(email, emailFolders.birthday )
         },
         {
-            condition: (email) => email.from.includes("Tony"),
+            from: "Tony",
             response: (email) =>  moveToFolder(email, emailFolders.spam )
         },
         {
-            condition: (email) => email.from.includes("A Gent NOT on Leave"),
+            from : "A Gent NOT on Leave",
             response: (email) => moveToFolder(email, emailFolders.important)
         }
     ],
@@ -67,9 +68,27 @@ const filterRouter = {
 
     applyFilter: (email) => {
         let result = {...email}; 
-        let chosenFilter = filterRouter.filters.find((filter) => filter.condition(email)) || filterRouter.default
-        result = chosenFilter.response(email);
+        console.log(filterRouter.filters);
+        const {response} = filterRouter.filters.find((filter) => {
+            return email.from.includes(filter.from)
+        }) || filterRouter.default;
+
+        result = response(email);
         return result;
+    },
+
+    addFilter: (from, folder) =>
+    {
+        let result = {
+            from: from, 
+            response : (email) => 
+            {
+                console.log(folder);
+                return moveToFolder(email, folder)
+
+            }
+        }
+        filterRouter.filters.push(result);   
     }
 
 }

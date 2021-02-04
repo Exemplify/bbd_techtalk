@@ -21,6 +21,8 @@ function updateInbox(value){
   if(value === currentFolder )
     return;
   currentFolder = value;
+
+  emails = applyEmailFilter ? emailFilter.filterEmails(emails) : emails;
   updateEmailFolder(emails, currentFolder);
 }
 
