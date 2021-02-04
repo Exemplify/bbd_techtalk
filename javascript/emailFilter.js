@@ -16,9 +16,8 @@ const emailFilter = {
     filterEmails : (emails)=> {
         let result = []
         emails.forEach( ( email )=> {
-            result.push(filterRouter.applyFilter(email));
+            result.push(filterIfStatments.applyFilter(email));
         });
-        filterRouter.addFilter("Chris", emailFolders.important)
         return result;
     }
 
@@ -28,7 +27,7 @@ const filterIfStatments = {
     
     applyFilter: (email) => {
         let result = {};
-        if (email.subject.includes("Birthdays")) {
+        if (email.from.includes("Birthdays")) {
             result = moveToFolder(email, emailFolders.birthday );
         }
         else if (email.from.includes("Tony")) {
@@ -45,50 +44,3 @@ const filterIfStatments = {
 
 }
 
-const filterRouter = {
-
-    filters: [
-        {
-            from: "Birthdays",
-            response: (email) => moveToFolder(email, emailFolders.birthday )
-        },
-        {
-            from: "Tony",
-            response: (email) =>  moveToFolder(email, emailFolders.spam )
-        },
-        {
-            from : "A Gent NOT on Leave",
-            response: (email) => moveToFolder(email, emailFolders.important)
-        }
-    ],
-
-    default:{ 
-        response: (email) => moveToFolder(email, emailFolders.inbox)
-    },
-
-    applyFilter: (email) => {
-        let result = {...email}; 
-        console.log(filterRouter.filters);
-        const {response} = filterRouter.filters.find((filter) => {
-            return email.from.includes(filter.from)
-        }) || filterRouter.default;
-
-        result = response(email);
-        return result;
-    },
-
-    addFilter: (from, folder) =>
-    {
-        let result = {
-            from: from, 
-            response : (email) => 
-            {
-                console.log(folder);
-                return moveToFolder(email, folder)
-
-            }
-        }
-        filterRouter.filters.push(result);   
-    }
-
-}

@@ -1,6 +1,6 @@
 let emails = [];
 let currentFolder = emailFolders.inbox;
-let applyEmailFilter = true;
+let applyEmailFilter = false;
 
 
 (function(window, document, undefined){
